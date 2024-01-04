@@ -17,7 +17,7 @@ BLACK = (0, 0, 0)
 
 # Initialize screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Shop Game")
+pygame.display.set_caption("Stockerz")
 clock = pygame.time.Clock()
 start_string = "Welcome to Stockerz"
 
@@ -212,13 +212,18 @@ money = 100
 #    "Item 7": {"price": 40, "quantity": 0},
 #    "Item 8": {"price": 45, "quantity": 0},
 #}
+
 day = 1
 news = 0
+
 
 items = ["Tech", "Finance", "Healthcare", "Energy", "Retail", "Telecom", "Transport", "Utilities"]
 prices = [10, 15, 20, 25, 30, 35, 40, 45]
 quantities = [0, 0, 0, 0, 0, 0, 0, 0]
+
+
 bias = [0, 1, 0, 1, 0, 1, 0, 1]
+
 font = pygame.font.SysFont(None, FONT_SIZE)
 
 def stock(start_x, start_y, width, height, bias, name):
@@ -319,8 +324,8 @@ while run:
     screen.blit(play_text, (650,20))
 
     pygame.draw.rect(screen, BLACK, (350, 20, 120, 40))
-    play_text = font.render(f"DAY {day}", True, WHITE)
-    screen.blit(play_text, (350,20))
+    day_text = font.render(f"DAY {day}", True, WHITE)
+    screen.blit(day_text, (350,20))
 
     font = pygame.font.SysFont(None, FONT_SIZE)
 
@@ -333,15 +338,10 @@ while run:
 
         # Shuffle the list in place
         random.shuffle(numbers)
-        print(numbers)
         # Iterate over the shuffled list
         for i in numbers:
             bias[i] = random.randint(0,1)
             temp = bias[i] * 10 + random.randint(0, 9)
-            
-            print(i)
-            print(temp)
-
             text = BiasesArray[i][temp]
             
             start_string += text
@@ -375,15 +375,18 @@ while run:
                 money += prices[i] * quantities[i]
                 quantities[i] = 0
             time.sleep(0.5)
+        if event.button == 3 and 350 <= x <= 470 and 20 <= y <= 60:
+            money += 1
         for i in range(0,8):
             button_y = 50 + 30 * i
             if event.button == 1:  # Left mouse button
-                
-                if item_x <= x <= item_x + 20 and button_y <= y <= button_y + 20 and money - prices[i] >= 0:  # Plus button
+                # Plus button
+                if item_x <= x <= item_x + 20 and button_y <= y <= button_y + 20 and money - prices[i] >= 0:  
                     money = round(money - prices[i],1)
                     quantities[i] += 1
                     time.sleep(0.1)
-                elif item_x + 20 <= x <= item_x + 40 and button_y <= y <= button_y + 20 and quantities[i] > 0:  # Minus button (if quantity > 0)
+                # Minus button (if quantity > 0)
+                elif item_x + 20 <= x <= item_x + 40 and button_y <= y <= button_y + 20 and quantities[i] > 0:
                     money = round(money + prices[i],1)
                     quantities[i] -= 1
                     time.sleep(0.05)
